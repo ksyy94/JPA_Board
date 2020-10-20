@@ -5,6 +5,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.cos.board.dto.BoardSaveRequestDto;
@@ -24,8 +26,8 @@ public class BoardService {
 		boardRepository.save(boardEntity);
 	}
 	
-	public List<Board> 글목록보기() {
-		 return boardRepository.findAll();		
+	public Page<Board> 글목록보기(Pageable pageable) {
+		 return boardRepository.findAll(pageable);		
 	}
 
 	@Transactional

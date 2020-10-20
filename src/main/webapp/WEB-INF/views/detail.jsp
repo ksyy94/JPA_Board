@@ -2,29 +2,40 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="layout/header.jsp"%>
 <main>
-	<h1>게시글 상세보기</h1>
-	<hr />
-	<table border="1">
+	<div class="container-fluid">
+		<h1>게시글 상세보기</h1>
+	</div>
+	<table class="table">
 		<tr>
 			<td>ID</td>
+
+			<td>${board.id}</td>
+		<tr>
 			<td>TITLE</td>
-			<td>CONTENT</td>
-			<td>READCOUNT</td>
-			<td>CREATEDATE</td>
+			<td><input id="title" type="text" value="${board.title}" /></td>
 		</tr>
-			<tr>
-				<td>${board.id}</td>
-				<td><input id="title" type="text" value="${board.title}"/></td>
-				<td><input id="content" type="text" value="${board.content}"/></td>
-				<td>${board.readCount}</td>
-				<td>${board.createDate}</td>
-			</tr>
+		<tr>
+			<td>CONTENT</td>
+			<td><textarea id="content">${board.content}</textarea></td>
+		</tr>
+		<tr>
+			<td>READCOUNT</td>
+			<td>${board.readCount}</td>
+		</tr>
+		<tr>
+			<td>CREATEDATE</td>
+			<td>${board.createDate}</td>
+		</tr>
 	</table>
-		<button onclick="updateBoard(${board.id})">수정</button>
-		<button onclick="deleteBoard(${board.id})">삭제</button>
+	<button class="btn btn-secondary" onclick="updateBoard(${board.id})">수정</button>
+	<button class="btn btn-secondary" onclick="deleteBoard(${board.id})">삭제</button>
+
 </main>
 
 <script>
+$(document).ready(function() {
+	  $('#content').summernote();
+});
 function deleteBoard(id){
 	fetch("/board/"+id,{method: "delete"})
 	.then(res=> res.text())

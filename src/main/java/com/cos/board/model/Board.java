@@ -34,8 +34,8 @@ public class Board {
 	@CreationTimestamp//now 값이 자동으로 들어감
 	private Timestamp createDate;
 	
-//	public String getCreateDate() {
-//		
-//		return createDate.toString().substring(0,10);
-//	}
+	public String getCreateDate() {
+		
+		return createDate.toString().substring(0,10);
+	}
 }

@@ -1,6 +1,10 @@
 package com.cos.board.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,21 +39,26 @@ public class BoardController {
 	}
 
 	@PostMapping("/save")
-	public String save(BoardSaveRequestDto dto) {
+	@ResponseBody
+	public String save(@RequestBody BoardSaveRequestDto dto) {
 		System.out.println(dto);
-		Board boardEntity = BoardSaveRequestDto.toEntity(dto);
-		boardRepository.save(boardEntity);
+		boardService.글쓰기(dto);
 		// 그냥리스트페이지로 가면 데이터를 같이 못들고 가기때문에 앞에 redirect:/ 를 붙여야함
-		return "redirect:/list";
+		return "ok";
 	}
 
 	// 스프링에서 Controller의 메서드의 파라메터 부분은 자동 DI가 됨
-	@GetMapping({"/list","","/"})
-	public String list(Model model) {
-		model.addAttribute("boards", boardService.글목록보기());
+	@GetMapping({"/list","/",""})
+	public String list(Model model, @PageableDefault(size =5, sort="id", direction = Direction.DESC) Pageable pageable) {
+		model.addAttribute("boards", boardService.글목록보기(pageable));
 		return "list";
 	}
-
+	
+	@GetMapping("/list/test")
+	@ResponseBody
+	public Page<Board> list(@PageableDefault(size =5, sort="id", direction = Direction.DESC) Pageable pageable) {
+		return boardService.글목록보기(pageable);
+	}
 	@GetMapping("/board/{id}")
 	public String detail(@PathVariable int id, Model model) throws MyArgsNotFound {
 
@@ -90,4 +99,5 @@ public class BoardController {
 		boardService.글수정하기(id, dto);
 		return "ok";
 	}
+	
 }
